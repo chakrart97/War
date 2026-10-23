@@ -17,8 +17,7 @@ public class QueueArrayTest {
         for (int i = 0; i < 16; i++) {
             growing.enqueue("item" + i);
         }
-        check("enqueue growth preserves all 16 items in FIFO order",
-                growing.size() == 16 && hasRemainingInOrder(growing, 0, 15));
+        check("enqueue growth preserves all 16 items in FIFO order", growing.size() == 16 && hasRemainingInOrder(growing, 0, 15));
         check("queue is empty after removing all grown items", growing.isEmpty());
 
         QueueArray<String> shrinking = new QueueArray<>();

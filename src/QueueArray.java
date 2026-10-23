@@ -10,6 +10,7 @@
  */
 
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class QueueArray<Item> implements Iterable<Item>, Queue<Item>{
@@ -41,8 +42,10 @@ public class QueueArray<Item> implements Iterable<Item>, Queue<Item>{
         if (tail == items.length) {
             tail = 0;
         }
-
         size++;
+        if (size == items.length) {
+            resize(items.length * 2);
+        }
     }
 
     public Item dequeue() {
@@ -56,7 +59,9 @@ public class QueueArray<Item> implements Iterable<Item>, Queue<Item>{
             if (head == items.length) {
                 head = 0;
             }
-
+            if (size <= items.length/4) {
+                resize(items.length/2);
+            }
 
             return itemToReturn;
         }
@@ -64,6 +69,13 @@ public class QueueArray<Item> implements Iterable<Item>, Queue<Item>{
 
     private void resize(int capacity) {
         //TODO : Implement the resize method and use it in the correct spots in QueueArray
+        Item[] bigger = (Item[]) (new Object[capacity]);
+        for (int i = 0; i < size; ++i) {
+            bigger[i] = items[(head + i) % items.length];
+        }
+        items = bigger;
+        head = 0;
+        tail = size;
     }
 
     public Iterator<Item> iterator() {
@@ -89,7 +101,7 @@ public class QueueArray<Item> implements Iterable<Item>, Queue<Item>{
              */
             public boolean hasNext() {
                 //TODO Implement the hasNext() method
-                return true;
+                return count < size;
             }
 
             /**
@@ -101,7 +113,10 @@ public class QueueArray<Item> implements Iterable<Item>, Queue<Item>{
              */
             public Item next() {
                 //TODO Implement the next() method
-                Item item = items[0];
+                Item item = items[pos];
+                ++pos;
+                if (pos == items.length) pos = 0;
+                count++;
                 return item;
 
             }
